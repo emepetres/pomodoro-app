@@ -1,6 +1,7 @@
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'pomodoro_page.dart';
+import 'settings_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,32 +30,25 @@ class MyApp extends StatelessWidget {
 }
 
 class MyAppState extends ChangeNotifier {
-  var current = WordPair.random();
+  int pomodoroDuration = 25;
+  String selectedSound = 'alarm.wav';
 
-  void getNext() {
-    current = WordPair.random();
+  void setPomodoroDuration(int minutes) {
+    pomodoroDuration = minutes;
     notifyListeners();
   }
 
-  var favorites = <WordPair>[];
-
-  void toggleFavorite() {
-    if (isFavorite(current)) {
-      favorites.remove(current);
-    } else {
-      favorites.add(current);
-    }
+  void setSelectedSound(String sound) {
+    selectedSound = sound;
     notifyListeners();
-  }
-
-  bool isFavorite(WordPair pair) {
-    return favorites.contains(pair);
   }
 }
 
 // ...
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -67,10 +61,10 @@ class _MyHomePageState extends State<MyHomePage> {
     Widget page;
     switch (selectedIndex) {
       case 0:
-        page = GeneratorPage();
+        page = PomodoroPage();
         break;
       case 1:
-        page = FavoritesPage();
+        page = SettingsPage();
         break;
       default:
         throw UnimplementedError('no widget for $selectedIndex');
@@ -90,8 +84,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       label: Text('Home'),
                     ),
                     NavigationRailDestination(
-                      icon: Icon(Icons.favorite),
-                      label: Text('Favorites'),
+                      icon: Icon(Icons.settings),
+                      label: Text('Settings'),
                     ),
                   ],
                   selectedIndex: selectedIndex,
@@ -112,103 +106,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         );
       },
-    );
-  }
-}
-
-class GeneratorPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-    var pair = appState.current;
-
-    IconData icon;
-    if (appState.favorites.contains(pair)) {
-      icon = Icons.favorite;
-    } else {
-      icon = Icons.favorite_border;
-    }
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          BigCard(pair: pair),
-          SizedBox(height: 10),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ElevatedButton.icon(
-                onPressed: () {
-                  appState.toggleFavorite();
-                },
-                icon: Icon(icon),
-                label: Text('Like'),
-              ),
-              SizedBox(width: 10),
-              ElevatedButton(
-                onPressed: () {
-                  appState.getNext();
-                },
-                child: Text('Next'),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class BigCard extends StatelessWidget {
-  const BigCard({super.key, required this.pair});
-
-  final WordPair pair;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    final style = theme.textTheme.displayMedium!.copyWith(
-      color: theme.colorScheme.onPrimary,
-    );
-
-    return Card(
-      color: theme.colorScheme.primary,
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Text(
-          pair.asLowerCase,
-          style: style,
-          semanticsLabel: "${pair.first} ${pair.second}",
-        ),
-      ),
-    );
-  }
-}
-
-class FavoritesPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-
-    if (appState.favorites.isEmpty) {
-      return Center(child: Text('No favorites yet.'));
-    }
-
-    return Padding(
-      padding: const EdgeInsets.all(38),
-      child: ListView(
-        children: [
-          Text("Favorites", style: Theme.of(context).textTheme.headlineMedium),
-          for (var pair in appState.favorites)
-            ListTile(
-              leading: Icon(Icons.favorite),
-              title: Text(pair.asLowerCase),
-            ),
-        ],
-      ),
     );
   }
 }

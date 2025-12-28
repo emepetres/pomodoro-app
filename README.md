@@ -1,16 +1,8 @@
 # pomodoro_app
 
-A new Flutter project.
+A Pomodoro timer application built with Flutter.
 
-## Getting Started
+## Sounds attribution
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- alarm.wav: [ALRMClok_pomodoro timer ringing_Sauli.wav](https://freesound.org/s/642755/) by Sauli, licensed under [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+- rain-rainforest.mp3: [Rain Sound and Rainforest.mp3](https://freesound.org/s/457447/) by INNORECORDS licensed under [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
